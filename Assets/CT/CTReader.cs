@@ -1,4 +1,3 @@
-using Microsoft.MixedReality.Toolkit.UI;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -7,23 +6,12 @@ using System.Linq;
 using System.Text;
 using UnityEngine;
 
-public class CTReader : MonoBehaviour
-{
+public class CTReader : MonoBehaviour {
     public TextAsset ct;
     public ComputeShader slicer;
-    public GameObject oo;
-    public GameObject sliderH;
-    public GameObject sliderV;
-    int kernel;
-
-    [HideInInspector]
-    public GameObject bottomBackLeft, bottomBackRight, topBackLeft, topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft, topFrontRight, center;
-    [HideInInspector]
     public float ctLength, ctDepth;
-    [HideInInspector]
     public Vector3 ctCenter;
-
-    private float minx, maxx, miny, maxy, minz, maxz;
+    int kernel;
 
     void Start() {
         Init();
@@ -39,14 +27,6 @@ public class CTReader : MonoBehaviour
         slicer.SetBuffer(kernel, "data", buf);
         slicer.SetInts("dims", nrrd.dims);
 
-        PointCloud(nrrd);
-    }
-
-    private void PointCloud(NRRD nrrd)
-    {
-        DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
-        dummyHandler.GoToZero();
-
         float lengthDirection = nrrd.lengthDirection, lengthSize = nrrd.dims[2];
         ctLength = Math.Abs(lengthDirection * lengthSize);
         float depthDirection = nrrd.depthDirection, depthSize = nrrd.dims[1];
@@ -56,107 +36,6 @@ public class CTReader : MonoBehaviour
             nrrd.origin.y + ((int)Math.Ceiling((double)(nrrd.dims[1] / 2) - 1) * nrrd.scale.y),
             nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
             );
-
-        ComputeMinMaxFloats(nrrd);
-
-        bottomBackLeft = CreateSphereFromPos(minx, miny, minz, "bottomBackLeft");
-        bottomBackRight = CreateSphereFromPos(minx, miny, maxz, "bottomBackRight");
-        topBackLeft = CreateSphereFromPos(minx, maxy, minz, "topBackLeft");
-        topBackRight = CreateSphereFromPos(minx, maxy, maxz, "topBackRight");
-        bottomFrontLeft = CreateSphereFromPos(maxx, miny, minz, "bottomFrontLeft");
-        bottomFrontRight = CreateSphereFromPos(maxx, miny, maxz, "bottomFrontRight");
-        topFrontLeft = CreateSphereFromPos(maxx, maxy, minz, "topFrontLeft");
-        topFrontRight = CreateSphereFromPos(maxx, maxy, maxz, "topFrontRight");
-        Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
-        center = CreateSphereFromPos(ccct.x, ccct.y, ccct.z, "center");
-        center.transform.localScale = new Vector3(0f, 0f, 0f);
-        Debug.Log(1);
-
-        dummyHandler.ChangeTransform(new Vector3(0.941f, 0.75f, 1.729f),
-            new Vector3(0f, 90f, 0f),
-            new Vector3(0.0025f, 0.0025f, 0.0025f));
-    }
-
-    private void ComputeMinMaxFloats(NRRD nrrd)
-    {
-        int rounds = 2;
-        minx = float.MaxValue;
-        maxx = float.MinValue;
-        miny = float.MaxValue;
-        maxy = float.MinValue;
-        minz = float.MaxValue;
-        maxz = float.MinValue;
-        for (int i = 0; i < rounds; i++)
-        {
-            // i : 10 == x : dim --> x = dim*i/10
-            int dx = (int)(nrrd.dims[0] * i / (rounds - 1));
-            for (int j = 0; j < rounds; j++)
-            {
-                int dy = (int)(nrrd.dims[1] * j / (rounds - 1));
-                for (int k = 0; k < rounds; k++)
-                {
-                    int dz = (int)(nrrd.dims[2] * k / (rounds - 1));
-                    float x = -1 * (nrrd.origin.x + dx * nrrd.scale.x);
-                    float y = nrrd.origin.y + dy * nrrd.scale.y;
-                    float z = nrrd.origin.z + dz * nrrd.scale.z;
-                    minx = Math.Min(minx, x);
-                    maxx = Math.Max(maxx, x);
-                    miny = Math.Min(miny, y);
-                    maxy = Math.Max(maxy, y);
-                    minz = Math.Min(minz, z);
-                    maxz = Math.Max(maxz, z);
-                }
-            }
-        }
-    }
-
-    private GameObject CreateSphereFromPos(float x, float y, float z, String n)
-    {
-        GameObject sphere = GameObject.CreatePrimitive(PrimitiveType.Sphere);
-        sphere.transform.position = new Vector3(x, y, z);
-        sphere.transform.localScale = new Vector3(6f, 6f, 6f);
-        sphere.name = n;
-        sphere.transform.parent = oo.transform;
-        return sphere;
-    }
-
-    private Vector3 FindCenter(float minx, float maxx, float miny, float maxy, float minz, float maxz)
-    {
-        float middlex = (maxx + minx) / 2,
-            middley = (maxy + miny) / 2,
-            middlez = (maxz + minz) / 2;
-
-        return new Vector3(middlex, middley, middlez);
-    }
-
-    public Vector3 GetCenterOfCt(TextAsset ctObj)
-    {
-        var nrrd = new NRRD(ctObj);
-
-        DummyTransformHandler dummyHandler = oo.GetComponent<DummyTransformHandler>();
-        dummyHandler.GoToZero();
-
-        float lengthDirection = nrrd.lengthDirection, lengthSize = nrrd.dims[2];
-        ctLength = Math.Abs(lengthDirection * lengthSize);
-        float depthDirection = nrrd.depthDirection, depthSize = nrrd.dims[1];
-        ctDepth = Math.Abs(depthDirection * depthSize);
-        ctCenter = new Vector3(
-            -1 * (nrrd.origin.x + ((int)Math.Ceiling((double)(nrrd.dims[0] / 2) - 1) * nrrd.scale.x)),
-            nrrd.origin.y + ((int)Math.Ceiling((double)(nrrd.dims[1] / 2) - 1) * nrrd.scale.y),
-            nrrd.origin.z + ((int)Math.Ceiling((double)(nrrd.dims[2] / 2) - 1) * nrrd.scale.z)
-            );
-
-        ComputeMinMaxFloats(nrrd);
-        Vector3 ccct = FindCenter(minx, maxx, miny, maxy, minz, maxz);
-
-        dummyHandler.RestoreBackup();
-        return ccct;
-    }
-
-    public GameObject[] GetPoints()
-    {
-        GameObject[] arr = new GameObject[] { bottomBackLeft, bottomBackRight, topBackLeft, topBackRight, bottomFrontLeft, bottomFrontRight, topFrontLeft, topFrontRight, center };
-        return arr;
     }
 
     public void Slice(Vector3 orig, Vector3 dx, Vector3 dy, Texture2D result) {
@@ -171,7 +50,7 @@ public class CTReader : MonoBehaviour
         dx = Vector3.Scale(dx, scale / rtex.width);
         dy = Vector3.Scale(dy, scale / rtex.height);
 
-        slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z }); 
+        slicer.SetFloats("orig", new float[] { orig.x, orig.y, orig.z });
         slicer.SetFloats("dx", new float[] { dx.x, dx.y, dx.z });
         slicer.SetFloats("dy", new float[] { dy.x, dy.y, dy.z });
         slicer.Dispatch(kernel, (rtex.width + 7) / 8, (rtex.height + 7) / 8, 1);

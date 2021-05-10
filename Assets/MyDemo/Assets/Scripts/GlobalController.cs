@@ -79,8 +79,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
     // Start is called before the first frame update
     void Start()
     {
-        //Debug.Log("helo1! " + boneGroup.transform.TransformPointUnscaled(boneGroup.transform.position));
-        // Debug.Log("helo2! " + boneGroup.transform.TransformPoint(boneGroup.transform.position));
 
         // init bone references
         InitBoneReferences();
@@ -109,8 +107,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
 
-        // patientsController.SwitchPatient();
-        // patientsController.SwitchPatient();
+        patientsController.SwitchPatient();
+        patientsController.SwitchPatient();
     }
 
     public void InitBoneReferences()
@@ -539,26 +537,25 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         {
             manipulationScene.SetActive(true);
 
-            /*UpdateScenePosition(screwSceneController.allGroup.transform,
+            UpdateScenePosition(screwSceneController.allGroup.transform,
                 screwSceneController.nearMenu.transform,
                 boneRef.transform,
-                nearMenu.transform);*/
+                nearMenu.transform);
             screwScene.SetActive(false);
         }
         else
         {
             screwScene.SetActive(true);
 
-            /*UpdateScenePosition(boneRef.transform,
+            UpdateScenePosition(boneRef.transform,
                 nearMenu.transform,
                 screwSceneController.allGroup.transform,
-                screwSceneController.nearMenu.transform);*/
+                screwSceneController.nearMenu.transform);
 
             manipulationScene.SetActive(false);
         }
     }
 
-    /*
     private void UpdateScenePosition(Transform oldSceneBone, Transform oldSceneMenu, Transform newSceneBone, Transform newSceneMenu)
     {
         PatientsController.CenterToRef(newSceneBone.gameObject, oldSceneBone.gameObject.GetComponentInChildren<Renderer>().bounds.center);
@@ -580,12 +577,6 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
         screwSceneController.plateGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.PLATE_GROUP);
         screwSceneController.boneGroup = findChildrenWithName(screwPatientTransform, GlobalConstants.BONE_GROUP);
         screwSceneController.ReInit();
-    }
-    */
-
-    public void ChangePatient()
-    {
-        patientsController.SwitchPatient();
     }
 
     private GameObject findChildrenWithName(Transform parent, String name)

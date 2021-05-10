@@ -22,13 +22,13 @@ MonoBehaviour:
     Tag: Untagged
     Asset: {fileID: 0}
   useLightingScene: 0
-  defaultLightingSceneIndex: -1
+  defaultLightingSceneIndex: 0
   lightingScenes: []
   contentScenes:
   - Name: SampleScene
     Path: Assets/MyDemo/SampleScene.unity
     Included: 1
-    BuildIndex: 0
+    BuildIndex: -1
     Tag: Untagged
     Asset: {fileID: 102900000, guid: 9fc0d4010bbf28b4594072e72b8655ab, type: 3}
   - Name: SampleSceneScrews

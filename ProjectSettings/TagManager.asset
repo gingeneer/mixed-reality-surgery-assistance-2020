@@ -10,8 +10,6 @@ TagManager:
   - LatDeleted
   - MedDeleted
   - NewDeleted
-  - Dist
-  - DistDeleted
   layers:
   - Default
   - TransparentFX
