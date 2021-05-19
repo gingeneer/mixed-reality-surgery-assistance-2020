@@ -107,8 +107,8 @@ public class GlobalController : MonoBehaviour//, IMixedRealitySpeechHandler
 
         ctPlane = ctPlane3.GetComponent<HandSlice>();
 
-        patientsController.SwitchPatient();
-        patientsController.SwitchPatient();
+        // patientsController.SwitchPatient();
+        // patientsController.SwitchPatient();
     }
 
     public void InitBoneReferences()

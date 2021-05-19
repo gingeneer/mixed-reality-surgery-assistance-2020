@@ -297,7 +297,7 @@ public class ScrewSceneController : MonoBehaviour
             );
 
         Destroy(screw.GetComponent<MeshCollider>());
-        scene.SetActive(false);
+        //scene.SetActive(true);
 
         GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint);
         cylinderScrew.transform.parent = screw.transform.parent;
