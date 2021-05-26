@@ -92,7 +92,8 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         // do the initialization after we joined the room
         base.OnJoinedRoom();
         // Initialize Screws and Bones
-        InitScrews();
+        InitScrews(PhotonNetwork.IsMasterClient);
+        
         // Initialize Plate List
         InitPlates();
 
@@ -314,7 +315,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
             (firstEndPt.z + secondEndPt.z) / 2
             );
 
-        Destroy(screw.GetComponent<MeshCollider>());
+        //Destroy(screw.GetComponent<MeshCollider>());
         //scene.SetActive(true);
 
         GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint);
@@ -333,7 +334,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         return cylinderScrew;
     }
 
-    private void InitScrews()
+    private void InitScrews(bool isMaster)
     {
         screws = new List<GameObject>();
 
@@ -344,16 +345,29 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         allGroupStartingPosition = allGroup.transform.position;
         allGroupStartingScale = allGroup.transform.localScale;
         allGroupStartingRotation = allGroup.transform.rotation;
-
+        Debug.Log("We are Master:" + isMaster.ToString());
         foreach (Transform screw in screwGroup.transform)
         {
-            Transform real_screw = screw.transform.GetChild(0);
+            if (isMaster) 
+            { 
+                Transform real_screw = screw.transform.GetChild(0);
 
-            GameObject generatedScrew = GenerateScrewFromObj(real_screw.gameObject);
-            screws.Add(generatedScrew);
-            originalScrewPositions.Add(screw.gameObject.name, generatedScrew.transform.position);
-            originalScrewScales.Add(screw.gameObject.name, generatedScrew.transform.localScale);
-            originalScrewRotations.Add(screw.gameObject.name, generatedScrew.transform.rotation);
+                GameObject generatedScrew = GenerateScrewFromObj(real_screw.gameObject);
+                screws.Add(generatedScrew);
+                originalScrewPositions.Add(screw.gameObject.name, generatedScrew.transform.position);
+                originalScrewScales.Add(screw.gameObject.name, generatedScrew.transform.localScale);
+                originalScrewRotations.Add(screw.gameObject.name, generatedScrew.transform.rotation);
+            }
+            else
+            {
+                // only destroy existing screws 
+                originalScrewPositions.Add(screw.gameObject.name, screw.transform.position);
+                originalScrewScales.Add(screw.gameObject.name, screw.transform.localScale);
+                originalScrewRotations.Add(screw.gameObject.name, screw.transform.rotation);
+                Transform real_screw = screw.transform.GetChild(0);
+                Destroy(real_screw.gameObject);
+                
+            }
         }
         SetScrewTags();
 
@@ -418,7 +432,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
 
     public void ReInit()
     {
-        InitScrews();
+        InitScrews(PhotonNetwork.IsMasterClient);
         InitPlates();
     }
 
@@ -870,7 +884,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
     {
         var newScrew = CreateCylinderBetweenPoints(pos1,pos2);
         newScrew.tag = ScrewConstants.NEW_SCREW_TAG;
-        newScrew.name = $"Screw_{screws.Count+1}";
+        newScrew.name = $"AAAAAScrew_{screws.Count+1}";
 
         screws.Add(newScrew);
         newScrew.transform.parent = screwGroup.transform;
@@ -889,8 +903,8 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
         var position = start + (offset / 2.0f);
 
-        var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity);
-        Debug.Log(cylinder);
+        var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity, 0);
+        //Debug.Log(cylinder);
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
 
