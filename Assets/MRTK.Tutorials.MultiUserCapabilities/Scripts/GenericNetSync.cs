@@ -12,12 +12,10 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         private Vector3 networkLocalPosition;
         private Quaternion networkLocalRotation;
         private Vector3 networkLocalScale;
-        private Transform networkParent;
 
         private Vector3 startingLocalPosition;
         private Quaternion startingLocalRotation;
         private Vector3 startingLocalScale;
-        private Transform startingParent;
 
         void IPunObservable.OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
         {
@@ -26,14 +24,12 @@ namespace MRTK.Tutorials.MultiUserCapabilities
                 stream.SendNext(transform.localPosition);
                 stream.SendNext(transform.localRotation);
                 stream.SendNext(transform.localScale);
-                stream.SendNext(transform.parent);
             }
             else
             {
                 networkLocalPosition = (Vector3) stream.ReceiveNext();
                 networkLocalRotation = (Quaternion) stream.ReceiveNext();
                 networkLocalScale = (Vector3) stream.ReceiveNext();
-                networkParent = (Transform)stream.ReceiveNext();
             }
         }
 
@@ -52,12 +48,10 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             startingLocalPosition = trans.localPosition;
             startingLocalRotation = trans.localRotation;
             startingLocalScale = trans.localScale;
-            startingParent = trans.parent;
 
             networkLocalPosition = startingLocalPosition;
             networkLocalRotation = startingLocalRotation;
             networkLocalScale = startingLocalScale;
-            networkParent = startingParent;
         }
 
         // private void FixedUpdate()
@@ -70,10 +64,6 @@ namespace MRTK.Tutorials.MultiUserCapabilities
                 trans.localPosition = networkLocalPosition;
                 trans.localRotation = networkLocalRotation;
                 trans.localScale = networkLocalScale;
-                if (transform.parent == null && !isUser)
-                {
-                    trans.parent = networkParent;
-                }
             }
 
             if (photonView.IsMine && isUser)
