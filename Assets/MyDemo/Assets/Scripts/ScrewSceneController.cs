@@ -362,6 +362,8 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
             }
             else
             {
+                //this line should create the list so that not-masters can index screws
+                screws.Add(screw.gameObject);
                 // only destroy existing screws 
                 originalScrewPositions.Add(screw.gameObject.name, screw.transform.position);
                 originalScrewScales.Add(screw.gameObject.name, screw.transform.localScale);
