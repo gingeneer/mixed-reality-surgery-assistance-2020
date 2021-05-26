@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 769114785284438384}
   - component: {fileID: 1353532286161613378}
   - component: {fileID: -1607039723242248070}
+  - component: {fileID: 3517072642038049567}
   m_Layer: 0
   m_Name: ScrewPrefab
   m_TagString: New
@@ -318,3 +319,15 @@ MonoBehaviour:
   m_SynchronizePosition: 1
   m_SynchronizeRotation: 1
   m_SynchronizeScale: 1
+--- !u!114 &3517072642038049567
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8609933443147746813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b4fd17489f5341f48abf7cbb622c4fc4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 

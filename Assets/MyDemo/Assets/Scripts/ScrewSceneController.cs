@@ -315,10 +315,12 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
             (firstEndPt.z + secondEndPt.z) / 2
             );
 
-        //Destroy(screw.GetComponent<MeshCollider>());
+        Destroy(screw.GetComponent<MeshCollider>());
         //scene.SetActive(true);
-
-        GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint);
+        // since we need the screws on the remote clients in the right hierarchy, we pass its parent
+        // use complete hierarchy to avoid confusion
+        
+        GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint, screw.transform.parent.gameObject);
         cylinderScrew.transform.parent = screw.transform.parent;
         cylinderScrew.tag = screw.tag;
         cylinderScrew.name = screw.name;
@@ -882,9 +884,9 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
 
     public void NewScrewregister(Vector3 pos1, Vector3 pos2)
     {
-        var newScrew = CreateCylinderBetweenPoints(pos1,pos2);
+        var newScrew = CreateCylinderBetweenPoints(pos1,pos2, screwGroup);
         newScrew.tag = ScrewConstants.NEW_SCREW_TAG;
-        newScrew.name = $"AAAAAScrew_{screws.Count+1}";
+        newScrew.name = $"Screw_{screws.Count+1}";
 
         screws.Add(newScrew);
         newScrew.transform.parent = screwGroup.transform;
@@ -897,13 +899,22 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         screws[screwIndex].GetComponentInChildren<BoundsControl>(true).enabled = true;
     }
 
-    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end)
+    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end, GameObject parent)
     {
         var offset = end - start;
         var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
         var position = start + (offset / 2.0f);
-
-        var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity, 0);
+        // we pass the parent name, so PUN clients know where to put the object
+        string parentName = parent.name;
+        while (parent.transform.parent != null)
+        {
+            parent = parent.transform.parent.gameObject;
+            parentName = parent.name + "/" + parentName;
+        }
+        Debug.Log("parent name: " + parentName);
+        object[] data = new object[1];
+        data[0] = parentName;
+        var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity, 0, data);
         //Debug.Log(cylinder);
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
@@ -969,6 +980,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         }
     }
 }
+
 
 static class ScrewConstants
 {
