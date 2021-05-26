@@ -10,9 +10,11 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using TMPro;
 using UnityEngine;
+using Photon.Pun;
+using Photon.Realtime;
 using static Microsoft.MixedReality.Toolkit.UI.ObjectManipulator;
 
-public class ScrewSceneController : MonoBehaviour
+public class ScrewSceneController : MonoBehaviourPunCallbacks
 {
 
     // Plates Visibility State
@@ -74,6 +76,21 @@ public class ScrewSceneController : MonoBehaviour
 
     void Start()
     {
+        // add the screw prefab to the photon pool
+        if (PhotonNetwork.PrefabPool is DefaultPool pool)
+        {
+
+            if (screwPrefab != null) pool.ResourceCache.Add(screwPrefab.name, screwPrefab);
+        }
+        
+        
+        
+    }
+
+    public override void OnJoinedRoom()
+    {
+        // do the initialization after we joined the room
+        base.OnJoinedRoom();
         // Initialize Screws and Bones
         InitScrews();
         // Initialize Plate List
@@ -82,142 +99,143 @@ public class ScrewSceneController : MonoBehaviour
         gPlatesState = PlatesState.Both;
         manipulating = false;
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
+
     }
 
-    /*
-    private void DecorateScrew(GameObject screw)
-    {
-        if (screw.GetComponentInChildren<BoundsControl>(true) == null)
+        /*
+        private void DecorateScrew(GameObject screw)
         {
-            BoundsControl boundsControl = screw.AddComponent<BoundsControl>() as BoundsControl;
-
-            boundsControl.ScaleHandlesConfig = new ScaleHandlesConfiguration();
-            boundsControl.ScaleHandlesConfig.HandleSize = (float)0.008;
-            boundsControl.ScaleHandlesConfig.ColliderPadding = new Vector3((float)0.008, (float)0.008, (float)0.008);
-
-            boundsControl.RotationHandlesConfig = new RotationHandlesConfiguration();
-            boundsControl.RotationHandlesConfig.ShowHandleForX = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForY = false;
-            boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
-
-            boundsControl.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<ConstraintManager>(true) == null)
-        {
-            ConstraintManager constraintManager = screw.AddComponent<ConstraintManager>();
-        }
-
-        if (screw.GetComponentInChildren<ObjectManipulator>(true) == null)
-        { 
-            ObjectManipulator objectManipulator = screw.AddComponent<ObjectManipulator>();
-            objectManipulator.ManipulationType = ManipulationHandFlags.OneHanded;
-            objectManipulator.OneHandRotationModeFar = RotateInOneHandType.RotateAboutObjectCenter;
-            objectManipulator.OneHandRotationModeNear = RotateInOneHandType.RotateAboutObjectCenter;
-
-            objectManipulator.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<ScaleConstraint>(true) == null)
-        { 
-            ScaleConstraint scaleConstraint = screw.AddComponent<ScaleConstraint>();
-            scaleConstraint.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<PositionConstraint>(true) == null)
-        {
-            PositionConstraint positionConstraint = screw.AddComponent<PositionConstraint>();
-            positionConstraint.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<WholeScaleConstraint>(true) == null)
-        {
-            WholeScaleConstraint wholeScaleConstraint = screw.AddComponent<WholeScaleConstraint>();
-            wholeScaleConstraint.enabled = false;
-        }
-
-        if (screw.GetComponentInChildren<NearInteractionGrabbable>(true) == null)
-        {
-            NearInteractionGrabbable nearInteractionGrabbable = screw.AddComponent<NearInteractionGrabbable>();
-            nearInteractionGrabbable.enabled = false;
-        }
-    }
-    */
-
-    /*
-    private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(bool latScrew)
-    {
-        String textAsset = referenceMedPositions.text.Replace("\"", "");
-        if(latScrew)
-        {
-            textAsset = referenceLatPositions.text.Replace("\"", "");
-        }
-        String[] lines = Regex.Split(textAsset, "\n|\r|\r\n");
-        List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
-        Vector3 dummyVector = new Vector3(0, 0, 0);
-        Vector3 item1 = dummyVector;
-
-        foreach(String line in lines)
-        {
-            if(line.Contains(",")) 
+            if (screw.GetComponentInChildren<BoundsControl>(true) == null)
             {
-                String[] vector = Regex.Split(line, ",");
-                Vector3 newPoint = new Vector3(float.Parse(vector[0]), float.Parse(vector[1]), float.Parse(vector[2]));
+                BoundsControl boundsControl = screw.AddComponent<BoundsControl>() as BoundsControl;
 
+                boundsControl.ScaleHandlesConfig = new ScaleHandlesConfiguration();
+                boundsControl.ScaleHandlesConfig.HandleSize = (float)0.008;
+                boundsControl.ScaleHandlesConfig.ColliderPadding = new Vector3((float)0.008, (float)0.008, (float)0.008);
 
-                if (item1 == dummyVector)
-                {
-                    item1 = newPoint;
-                }
-                else
-                {
-                    points.Add(new Tuple<Vector3, Vector3>(item1, newPoint));
-                    item1 = dummyVector;
-                }
+                boundsControl.RotationHandlesConfig = new RotationHandlesConfiguration();
+                boundsControl.RotationHandlesConfig.ShowHandleForX = false;
+                boundsControl.RotationHandlesConfig.ShowHandleForY = false;
+                boundsControl.RotationHandlesConfig.ShowHandleForZ = false;
+
+                boundsControl.enabled = false;
+            }
+
+            if (screw.GetComponentInChildren<ConstraintManager>(true) == null)
+            {
+                ConstraintManager constraintManager = screw.AddComponent<ConstraintManager>();
+            }
+
+            if (screw.GetComponentInChildren<ObjectManipulator>(true) == null)
+            { 
+                ObjectManipulator objectManipulator = screw.AddComponent<ObjectManipulator>();
+                objectManipulator.ManipulationType = ManipulationHandFlags.OneHanded;
+                objectManipulator.OneHandRotationModeFar = RotateInOneHandType.RotateAboutObjectCenter;
+                objectManipulator.OneHandRotationModeNear = RotateInOneHandType.RotateAboutObjectCenter;
+
+                objectManipulator.enabled = false;
+            }
+
+            if (screw.GetComponentInChildren<ScaleConstraint>(true) == null)
+            { 
+                ScaleConstraint scaleConstraint = screw.AddComponent<ScaleConstraint>();
+                scaleConstraint.enabled = false;
+            }
+
+            if (screw.GetComponentInChildren<PositionConstraint>(true) == null)
+            {
+                PositionConstraint positionConstraint = screw.AddComponent<PositionConstraint>();
+                positionConstraint.enabled = false;
+            }
+
+            if (screw.GetComponentInChildren<WholeScaleConstraint>(true) == null)
+            {
+                WholeScaleConstraint wholeScaleConstraint = screw.AddComponent<WholeScaleConstraint>();
+                wholeScaleConstraint.enabled = false;
+            }
+
+            if (screw.GetComponentInChildren<NearInteractionGrabbable>(true) == null)
+            {
+                NearInteractionGrabbable nearInteractionGrabbable = screw.AddComponent<NearInteractionGrabbable>();
+                nearInteractionGrabbable.enabled = false;
             }
         }
+        */
 
-        return points;
-    }
-    */
-
-    /*
-    private Matrix<float> FindTransformationMatrix(Vector3[] thisSysCenters, Tuple<Vector3, Vector3>[] textScrewPoints)
-    {
-        Vector3[] otherSysPoints = new Vector3[3];
-        for (int i = 0; i < 3; i++)
+        /*
+        private List<Tuple<Vector3, Vector3>> ProcessScrewPosition(bool latScrew)
         {
-            Tuple<Vector3, Vector3> otherSysTuple = textScrewPoints[i];
-            otherSysPoints[i] = new Vector3(
-            (otherSysTuple.Item1.x + otherSysTuple.Item2.x) / 2,
-            (otherSysTuple.Item1.y + otherSysTuple.Item2.y) / 2,
-            (otherSysTuple.Item1.z + otherSysTuple.Item2.z) / 2);
+            String textAsset = referenceMedPositions.text.Replace("\"", "");
+            if(latScrew)
+            {
+                textAsset = referenceLatPositions.text.Replace("\"", "");
+            }
+            String[] lines = Regex.Split(textAsset, "\n|\r|\r\n");
+            List<Tuple<Vector3, Vector3>> points = new List<Tuple<Vector3, Vector3>>();
+            Vector3 dummyVector = new Vector3(0, 0, 0);
+            Vector3 item1 = dummyVector;
+
+            foreach(String line in lines)
+            {
+                if(line.Contains(",")) 
+                {
+                    String[] vector = Regex.Split(line, ",");
+                    Vector3 newPoint = new Vector3(float.Parse(vector[0]), float.Parse(vector[1]), float.Parse(vector[2]));
+
+
+                    if (item1 == dummyVector)
+                    {
+                        item1 = newPoint;
+                    }
+                    else
+                    {
+                        points.Add(new Tuple<Vector3, Vector3>(item1, newPoint));
+                        item1 = dummyVector;
+                    }
+                }
+            }
+
+            return points;
         }
+        */
 
-        float[][] thisSysColumnArrays = {
-            new float[]{ thisSysCenters[0].x, thisSysCenters[0].y, thisSysCenters[0].z },
-            new float[]{ thisSysCenters[1].x, thisSysCenters[1].y, thisSysCenters[1].z },
-            new float[]{ thisSysCenters[2].x, thisSysCenters[2].y, thisSysCenters[2].z } };
-        Matrix<float> thisSystemMat = Matrix<float>.Build.DenseOfColumnArrays(thisSysColumnArrays);
+        /*
+        private Matrix<float> FindTransformationMatrix(Vector3[] thisSysCenters, Tuple<Vector3, Vector3>[] textScrewPoints)
+        {
+            Vector3[] otherSysPoints = new Vector3[3];
+            for (int i = 0; i < 3; i++)
+            {
+                Tuple<Vector3, Vector3> otherSysTuple = textScrewPoints[i];
+                otherSysPoints[i] = new Vector3(
+                (otherSysTuple.Item1.x + otherSysTuple.Item2.x) / 2,
+                (otherSysTuple.Item1.y + otherSysTuple.Item2.y) / 2,
+                (otherSysTuple.Item1.z + otherSysTuple.Item2.z) / 2);
+            }
 
-        float[][] otherSysColumnArrays = {
-            new float[]{ otherSysPoints[0].x, otherSysPoints[0].y, otherSysPoints[0].z },
-            new float[]{ otherSysPoints[1].x, otherSysPoints[1].y, otherSysPoints[1].z },
-            new float[]{ otherSysPoints[2].x, otherSysPoints[2].y, otherSysPoints[2].z } };
-        Matrix<float> otherSystemMat = Matrix<float>.Build.DenseOfColumnArrays(otherSysColumnArrays);
+            float[][] thisSysColumnArrays = {
+                new float[]{ thisSysCenters[0].x, thisSysCenters[0].y, thisSysCenters[0].z },
+                new float[]{ thisSysCenters[1].x, thisSysCenters[1].y, thisSysCenters[1].z },
+                new float[]{ thisSysCenters[2].x, thisSysCenters[2].y, thisSysCenters[2].z } };
+            Matrix<float> thisSystemMat = Matrix<float>.Build.DenseOfColumnArrays(thisSysColumnArrays);
 
-        // thisCoordSys = basis (matrix.mul) otherCoordSys -->
-        //     basis = thisCoordSys (matrix.mul) otherCoordSys^(-1)
+            float[][] otherSysColumnArrays = {
+                new float[]{ otherSysPoints[0].x, otherSysPoints[0].y, otherSysPoints[0].z },
+                new float[]{ otherSysPoints[1].x, otherSysPoints[1].y, otherSysPoints[1].z },
+                new float[]{ otherSysPoints[2].x, otherSysPoints[2].y, otherSysPoints[2].z } };
+            Matrix<float> otherSystemMat = Matrix<float>.Build.DenseOfColumnArrays(otherSysColumnArrays);
 
-        Matrix<float> basis = thisSystemMat.Multiply((otherSystemMat.Inverse()));
+            // thisCoordSys = basis (matrix.mul) otherCoordSys -->
+            //     basis = thisCoordSys (matrix.mul) otherCoordSys^(-1)
 
-        Debug.Log(basis);
+            Matrix<float> basis = thisSystemMat.Multiply((otherSystemMat.Inverse()));
 
-        return basis;
-    }
-    */
+            Debug.Log(basis);
 
-    private GameObject GenerateScrewFromObj(GameObject screw)
+            return basis;
+        }
+        */
+
+        private GameObject GenerateScrewFromObj(GameObject screw)
     {
         scene.SetActive(true);
         MeshCollider collider = screw.AddComponent<MeshCollider>();
@@ -871,8 +889,8 @@ public class ScrewSceneController : MonoBehaviour
         var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
         var position = start + (offset / 2.0f);
 
-        var cylinder = Instantiate(screwPrefab, position, Quaternion.identity);
-        
+        var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity);
+        Debug.Log(cylinder);
         cylinder.transform.up = offset;
         cylinder.transform.localScale = scale;
 

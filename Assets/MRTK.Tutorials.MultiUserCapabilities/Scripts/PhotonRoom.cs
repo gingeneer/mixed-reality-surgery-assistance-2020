@@ -64,7 +64,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             {
                 if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
 
-                if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
+                //if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
             }
         }
 
@@ -86,7 +86,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
             if (!PhotonNetwork.IsMasterClient) return;
 
-            if (TableAnchor.Instance != null) CreateInteractableObjects();
+            // if (TableAnchor.Instance != null) CreateInteractableObjects();
         }
 
         private void CreatPlayer()

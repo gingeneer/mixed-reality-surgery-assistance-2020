@@ -145,7 +145,7 @@ namespace Photon.Pun
                 // if ID was 0 for an awakened PhotonView, the view should add itself into the NetworkingClient.photonViewList after setup
                 bool viewMustRegister = this.didAwake && this.viewIdField == 0 && value != 0;
                 //int oldValue = this.viewIdField;
-
+                Debug.Log("trying to get new ViewID");
                 // TODO: decide if a viewID can be changed once it wasn't 0. most likely that is not a good idea
                 // check if this view is in NetworkingClient.photonViewList and UPDATE said list (so we don't keep the old viewID with a reference to this object)
                 // PhotonNetwork.NetworkingClient.RemovePhotonView(this, true);
