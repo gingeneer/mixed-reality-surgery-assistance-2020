@@ -20,7 +20,11 @@ public class PunSetParent : MonoBehaviourPun, IPunInstantiateMagicCallback
         if (transform.parent == null && parentName != "")
         {
             Debug.Log("BBBBBBBBBBB setting parent of " + this.gameObject.name + " to " + parentName);
-            if (GameObject.Find(parentName)) transform.parent = GameObject.Find(parentName).transform;
+            if (GameObject.Find(parentName))
+            {
+                Debug.Log("found parent object, setting it...");
+                transform.parent = GameObject.Find(parentName).transform;
+            }
         }
 
     }
