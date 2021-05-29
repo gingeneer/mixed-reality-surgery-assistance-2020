@@ -27,6 +27,11 @@ public class PunSetParent : MonoBehaviourPun, IPunInstantiateMagicCallback
         this.gameObject.GetComponent<WholeScaleConstraint>().enabled = false;
         this.gameObject.GetComponent<PositionConstraint>().enabled = false;
         this.gameObject.GetComponent<NearInteractionGrabbable>().enabled = false;
+        GameObject screwSceneController = GameObject.Find("Controllers/ScrewSceneController");
+        if (screwSceneController != null)
+        {
+            screwSceneController.GetComponent<ScrewSceneController>().RemoteScrewsLoadedCallback();
+        }
         
     }
     void Update()
