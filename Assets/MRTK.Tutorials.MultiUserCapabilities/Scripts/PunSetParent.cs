@@ -13,7 +13,7 @@ public class PunSetParent : MonoBehaviourPun, IPunInstantiateMagicCallback
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
         object[] data = info.photonView.InstantiationData;
-        if (data != null && data.Length == 1)
+        if (data != null && data.Length == 3)
         {
             this.parentName = (string)data[0];
             this.gameObject.tag = (string)data[1];

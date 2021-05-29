@@ -100,6 +100,10 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         gPlatesState = PlatesState.Both;
         manipulating = false;
         screwSizeText = screwSizeWindow.GetComponentInChildren<TextMesh>(true);
+        foreach (GameObject screw in screws)
+        {
+            DeactivateScrew(screw);
+        }
 
     }
 
