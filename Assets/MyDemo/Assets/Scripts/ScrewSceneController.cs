@@ -320,7 +320,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         // since we need the screws on the remote clients in the right hierarchy, we pass its parent
         // use complete hierarchy to avoid confusion
         
-        GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint, screw.transform.parent.gameObject);
+        GameObject cylinderScrew = CreateCylinderBetweenPoints(startPoint, endPoint, screw.transform.parent.gameObject, screw.tag, screw.name);
         cylinderScrew.transform.parent = screw.transform.parent;
         cylinderScrew.tag = screw.tag;
         cylinderScrew.name = screw.name;
@@ -886,7 +886,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
 
     public void NewScrewregister(Vector3 pos1, Vector3 pos2)
     {
-        var newScrew = CreateCylinderBetweenPoints(pos1,pos2, screwGroup);
+        var newScrew = CreateCylinderBetweenPoints(pos1,pos2, screwGroup, ScrewConstants.NEW_SCREW_TAG, $"Screw_{screws.Count + 1}");
         newScrew.tag = ScrewConstants.NEW_SCREW_TAG;
         newScrew.name = $"Screw_{screws.Count+1}";
 
@@ -901,7 +901,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         screws[screwIndex].GetComponentInChildren<BoundsControl>(true).enabled = true;
     }
 
-    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end, GameObject parent)
+    public GameObject CreateCylinderBetweenPoints(Vector3 start, Vector3 end, GameObject parent, string tag, string name)
     {
         var offset = end - start;
         var scale = new Vector3(0.01F, offset.magnitude / 2.0f, 0.01F);
@@ -914,8 +914,10 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
             parentName = parent.name + "/" + parentName;
         }
         Debug.Log("parent name: " + parentName);
-        object[] data = new object[1];
+        object[] data = new object[3];
         data[0] = parentName;
+        data[1] = tag;
+        data[2] = name;
         var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity, 0, data);
         //Debug.Log(cylinder);
         cylinder.transform.up = offset;
