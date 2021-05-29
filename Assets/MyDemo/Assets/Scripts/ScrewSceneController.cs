@@ -105,10 +105,17 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
 
     public void RemoteScrewsLoadedCallback()
     {
+        Debug.Log("callback called");
         foreach (GameObject screw in screws)
         {
             DeactivateScrew(screw);
         }
+    }
+
+    public void RemoteScrewLoadedCallback(GameObject screw)
+    {
+        DeactivateScrew(screw);
+        screws.Add(screw);
     }
 
         /*
@@ -370,19 +377,19 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
             }
             else
             {
-                //this line should create the list so that not-masters can index screws
-                screws.Add(screw.gameObject);
+                // this line should create the list so that not-masters can index screws
+                // screws.Add(screw.gameObject);
                 // only destroy existing screws 
-                originalScrewPositions.Add(screw.gameObject.name, screw.transform.position);
-                originalScrewScales.Add(screw.gameObject.name, screw.transform.localScale);
-                originalScrewRotations.Add(screw.gameObject.name, screw.transform.rotation);
                 Transform real_screw = screw.transform.GetChild(0);
+                originalScrewPositions.Add(screw.gameObject.name, real_screw.transform.position);
+                originalScrewScales.Add(screw.gameObject.name, real_screw.transform.localScale);
+                originalScrewRotations.Add(screw.gameObject.name, real_screw.transform.rotation);
                 Destroy(real_screw.gameObject);
                 
             }
         }
         SetScrewTags();
-
+        Debug.Log("finished initializing screws");
         screwIndex = 0;
     }
 
