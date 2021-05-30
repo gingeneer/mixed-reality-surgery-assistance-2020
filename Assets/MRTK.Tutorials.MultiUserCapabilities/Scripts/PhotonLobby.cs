@@ -1,12 +1,16 @@
 ﻿using Photon.Pun;
 using Photon.Realtime;
 using UnityEngine;
+using Microsoft.MixedReality.Toolkit.Experimental.UI;
 
 namespace MRTK.Tutorials.MultiUserCapabilities
 {
     public class PhotonLobby : MonoBehaviourPunCallbacks
     {
         public static PhotonLobby Lobby;
+
+        public string roomName = "default";
+        public MixedRealityKeyboard mrkeyboard;
 
         private int roomNumber = 1;
         private int userIdCount;
@@ -28,18 +32,49 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
             DontDestroyOnLoad(gameObject);
 
+            mrkeyboard = GetComponent<MixedRealityKeyboard>();
+
             GenericNetworkManager.OnReadyToStartNetwork += StartNetwork;
         }
-
-        public override void OnConnectedToMaster()
+        public void GoOnline()
         {
-            var randomUserId = Random.Range(0, 999999);
+            var randomUserId = Random.Range(0, 999);
             PhotonNetwork.AutomaticallySyncScene = true;
             PhotonNetwork.AuthValues = new AuthenticationValues();
             PhotonNetwork.AuthValues.UserId = randomUserId.ToString();
             userIdCount++;
             PhotonNetwork.NickName = PhotonNetwork.AuthValues.UserId;
-            PhotonNetwork.JoinRandomRoom();
+            Debug.Log("Going Online");
+
+            //string defaultName = "room_" + Random.Range(1000, 9999) + "_" + Random.Range(1000, 9999);
+            string defaultName = roomName;
+
+            if (Application.isEditor)
+            {
+                Debug.Log("we are inside editor, connecting to " + defaultName);
+                RoomOptions roomOptions = new RoomOptions();
+                roomOptions.IsVisible = false;
+                PhotonNetwork.JoinOrCreateRoom(defaultName, roomOptions, TypedLobby.Default);
+
+            }
+            else
+            {
+                mrkeyboard.ShowKeyboard(defaultName);
+                Debug.Log(mrkeyboard);
+            }
+            
+
+        }
+
+        public void Connect()
+        {
+            Debug.Log("Typing done! Room Name=" + mrkeyboard.Text);
+            roomName = mrkeyboard.Text;
+
+            RoomOptions roomOptions = new RoomOptions();
+            roomOptions.IsVisible = false;
+            PhotonNetwork.JoinOrCreateRoom(roomName, roomOptions, TypedLobby.Default);
+
         }
 
         public override void OnJoinedRoom()
@@ -83,7 +118,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
 
         private void CreateRoom()
         {
-            var roomOptions = new RoomOptions {IsVisible = true, IsOpen = true, MaxPlayers = 10};
+            var roomOptions = new RoomOptions { IsVisible = true, IsOpen = true, MaxPlayers = 10 };
             PhotonNetwork.CreateRoom("Room" + Random.Range(1, 3000), roomOptions);
         }
     }

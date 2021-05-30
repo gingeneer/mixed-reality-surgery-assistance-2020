@@ -938,9 +938,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity, 0, data);
         //Debug.Log(cylinder);
         cylinder.transform.up = offset;
-        Debug.Log("current scale: " + cylinder.transform.localScale);
         cylinder.transform.localScale = scale;
-        Debug.Log("new scale: " + cylinder.transform.localScale);
 
         return cylinder;
     }
