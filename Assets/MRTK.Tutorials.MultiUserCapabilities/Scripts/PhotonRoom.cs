@@ -25,6 +25,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             base.OnPlayerEnteredRoom(newPlayer);
             photonPlayers = PhotonNetwork.PlayerList;
             playersInRoom++;
+            Debug.Log($"Players in room: {playersInRoom}");
         }
 
         private void Awake()
@@ -62,7 +63,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             // Allow prefabs not in a Resources folder
             if (PhotonNetwork.PrefabPool is DefaultPool pool)
             {
-                if (photonUserPrefab != null) pool.ResourceCache.Add(photonUserPrefab.name, photonUserPrefab);
+                if (photonUserPrefab != null) pool.ResourceCache[photonUserPrefab.name] = photonUserPrefab;
 
                 //if (roverExplorerPrefab != null) pool.ResourceCache.Add(roverExplorerPrefab.name, roverExplorerPrefab);
             }

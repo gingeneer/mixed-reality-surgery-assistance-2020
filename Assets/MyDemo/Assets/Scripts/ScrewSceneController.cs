@@ -80,7 +80,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         if (PhotonNetwork.PrefabPool is DefaultPool pool)
         {
 
-            if (screwPrefab != null) pool.ResourceCache.Add(screwPrefab.name, screwPrefab);
+            if (screwPrefab != null) pool.ResourceCache[screwPrefab.name] = screwPrefab;
         }
         
         
