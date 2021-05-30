@@ -114,8 +114,10 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
 
     public void RemoteScrewLoadedCallback(GameObject screw)
     {
+        Debug.Log("ScrewLoadedCallback called");
         DeactivateScrew(screw);
         screws.Add(screw);
+        
     }
 
         /*
@@ -928,7 +930,7 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
             parent = parent.transform.parent.gameObject;
             parentName = parent.name + "/" + parentName;
         }
-        Debug.Log("parent name: " + parentName);
+        //Debug.Log("parent name: " + parentName);
         object[] data = new object[3];
         data[0] = parentName;
         data[1] = tag;
@@ -936,7 +938,9 @@ public class ScrewSceneController : MonoBehaviourPunCallbacks
         var cylinder = PhotonNetwork.Instantiate(screwPrefab.name, position, Quaternion.identity, 0, data);
         //Debug.Log(cylinder);
         cylinder.transform.up = offset;
+        Debug.Log("current scale: " + cylinder.transform.localScale);
         cylinder.transform.localScale = scale;
+        Debug.Log("new scale: " + cylinder.transform.localScale);
 
         return cylinder;
     }
