@@ -12,6 +12,8 @@ namespace MRTK.Tutorials.MultiUserCapabilities
         public string roomName = "default";
         public MixedRealityKeyboard mrkeyboard;
 
+        public bool useKeyboard = false;
+
         private int roomNumber = 1;
         private int userIdCount;
 
@@ -49,7 +51,7 @@ namespace MRTK.Tutorials.MultiUserCapabilities
             //string defaultName = "room_" + Random.Range(1000, 9999) + "_" + Random.Range(1000, 9999);
             string defaultName = roomName;
 
-            if (Application.isEditor)
+            if (!useKeyboard || Application.isEditor)
             {
                 Debug.Log("we are inside editor, connecting to " + defaultName);
                 RoomOptions roomOptions = new RoomOptions();
