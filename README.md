@@ -13,19 +13,21 @@
 - **Joshua Sammet** <br>jsammet@student.ethz.ch
 
 ## Project Description
-The goal of this project is to expand the HoloLens 2 application able to assist surgeons during complex fracture surgeries that was created in the las years Mixed Reality Lab. Our contribution contains the implementation of an multi-user capability, allowing multiple users to see and work in the same scene together.
-To give better overview over the implementations and work, only additions by our group will be added here and the original ReadMe of last years group can be find below.
+The goal of this project is to expand the HoloLens 2 application assisting surgeons during complex fracture surgeries that was started in last years Mixed Reality Lab. 
+Our contribution contains the implementation of an multi-user capability, allowing multiple users to see and work in the same scene together.
+To give better overview over the implementations and work, the original ReadMe of last years group can be found below.
 
 ## Content and additional files
-This Git contains all files necessary for the application itself. After downloading, it can be openend in Unity. To be fully executeable, some additional work has to be done.
+This Git contains all files necessary for the application itself. After downloading, it can be openend in Unity. To be fully executable, some additional work has to be done.
 1. The Mixed Reality ToolKit (MRTK) has to be used for downloading relevant features as in the [documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-base-02?tabs=openxr#importing-the-mixed-reality-toolkit-and-configuring-the-unity-project) explained. It might be necessary to switch the build platform, as it is explained [here](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-base-02?tabs=openxr).
 2. An Azure Spatial Anchors resource has to be created and linked in the project files. Again, see the [documentation](https://docs.microsoft.com/en-us/azure/spatial-anchors/quickstarts/get-started-unity-hololens?tabs=azure-portal#create-a-spatial-anchors-resource) for easy installation.
 3. The Photon Unity Network room has to be created. This is again explained in the [documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-sharing-02#creating-the-pun-application).
 
 The reason for this additional work required is that those resources are bound to a personal account and hence cannot be shared via Git - especially since they are only free for small usages.
 
-##Contribution and Work
+## Contribution and Work
 Since this project was and addition to an already existing project, our contributions are widely spread throughout the files and folders. Please refer the project report and the commit history for further insight.
+This is also due to Unity's properties as a development environment.
 
 # [Mixed Reality Lab](http://www.vvz.ethz.ch/Vorlesungsverzeichnis/lerneinheit.view?lerneinheitId=139691&semkez=2020W&ansicht=KATALOGDATEN&lang=en) 2020, Course Project
 
