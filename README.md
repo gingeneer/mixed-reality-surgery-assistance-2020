@@ -16,7 +16,7 @@
 The goal of this project is to expand the HoloLens 2 application able to assist surgeons during complex fracture surgeries that was created in the las years Mixed Reality Lab. Our contribution contains the implementation of an multi-user capability, allowing multiple users to see and work in the same scene together.
 To give better overview over the implementations and work, only additions by our group will be added here and the original ReadMe of last years group can be find below.
 
-##Content and additional files
+## Content and additional files
 This Git contains all files necessary for the application itself. After downloading, it can be openend in Unity. To be fully executeable, some additional work has to be done.
 1. The Mixed Reality ToolKit (MRTK) has to be used for downloading relevant features as in the [documentation](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-base-02?tabs=openxr#importing-the-mixed-reality-toolkit-and-configuring-the-unity-project) explained. It might be necessary to switch the build platform, as it is explained [here](https://docs.microsoft.com/en-us/windows/mixed-reality/develop/unity/tutorials/mr-learning-base-02?tabs=openxr).
 2. An Azure Spatial Anchors resource has to be created and linked in the project files. Again, see the [documentation](https://docs.microsoft.com/en-us/azure/spatial-anchors/quickstarts/get-started-unity-hololens?tabs=azure-portal#create-a-spatial-anchors-resource) for easy installation.
