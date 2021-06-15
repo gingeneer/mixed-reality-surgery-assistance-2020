@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 705507994}
-  m_IndirectSpecularColor: {r: 0.44657826, g: 0.49641263, b: 0.57481676, a: 1}
+  m_IndirectSpecularColor: {r: 0.44657844, g: 0.49641222, b: 0.57481694, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -24960,6 +24960,21 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 3498052043663173285, guid: 027a280457906a64aa8223f89eaac773,
+        type: 3}
+      propertyPath: spatialAnchorsAccountId
+      value: 507a333f-de1f-40c6-9771-c53c401a9dc3
+      objectReference: {fileID: 0}
+    - target: {fileID: 3498052043663173285, guid: 027a280457906a64aa8223f89eaac773,
+        type: 3}
+      propertyPath: spatialAnchorsAccountKey
+      value: BuC9L3EHoA22XK1tJ8KrCAEsLSY/5w0OHKewPIUClX0=
+      objectReference: {fileID: 0}
+    - target: {fileID: 3498052043663173285, guid: 027a280457906a64aa8223f89eaac773,
+        type: 3}
+      propertyPath: spatialAnchorsAccountDomain
+      value: westeurope.mixedreality.azure.com
+      objectReference: {fileID: 0}
     - target: {fileID: 5208281402898077636, guid: 027a280457906a64aa8223f89eaac773,
         type: 3}
       propertyPath: m_Enabled
@@ -28466,6 +28481,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9fcb6341cafc3f84994828d3606683d3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  handleMaterial: {fileID: 0}
+  handleGrabbedMaterial: {fileID: 0}
+  handlePrefab: {fileID: 0}
+  handleSize: 0.016
+  colliderPadding: {x: 0.016, y: 0.016, z: 0.016}
+  drawTetherWhenManipulating: 1
+  handlesIgnoreCollider: {fileID: 0}
+  handlePrefabColliderType: 1
+  showHandleForX: 0
+  showHandleForY: 0
+  showHandleForZ: 0
 --- !u!1 &1837677377
 GameObject:
   m_ObjectHideFlags: 0
